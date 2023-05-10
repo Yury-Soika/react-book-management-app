@@ -48,7 +48,7 @@ describe("BookForm component", () => {
   });
 
   it("pre-populates the form fields if a book prop is provided", () => {
-    const book = {
+    const mockBook = {
       bookname: "Test Book",
       author: "Test Author",
       quantity: "10",
@@ -56,7 +56,7 @@ describe("BookForm component", () => {
       date: new Date(),
     };
     const { getByLabelText } = render(
-      <BookForm {...defaultProps} book={book} />
+      <BookForm {...defaultProps} book={mockBook} />
     );
     expect(getByLabelText("Book Name")).toHaveValue("Test Book");
     expect(getByLabelText("Book Author")).toHaveValue("Test Author");

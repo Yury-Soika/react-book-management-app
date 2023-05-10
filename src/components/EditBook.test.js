@@ -5,60 +5,55 @@ import BooksContext from "../context/BooksContext";
 import EditBook from "./EditBook";
 
 describe("EditBook component", () => {
+  const oldBook = {
+    id: "1",
+    bookname: "Book1",
+    author: "Author1",
+    quantity: "1",
+    price: "1",
+  };
+  const mockBook = {
+    id: "1",
+    bookname: "Book One",
+    author: "Author One",
+    price: "10",
+    quantity: "5",
+    date: expect.any(Date),
+  };
+
+  const setBooks = jest.fn();
+  const history = { push: jest.fn() };
+
+  const component = (
+    <MemoryRouter initialEntries={[`/edit/1`]}>
+      <Route path="/edit/:id">
+        <BooksContext.Provider value={{ books: [oldBook], setBooks }}>
+          <EditBook history={history} />
+        </BooksContext.Provider>
+      </Route>
+    </MemoryRouter>
+  );
+
   test("renders without errors", () => {
-    const { getByTestId } = render(
-      <MemoryRouter initialEntries={[`/edit/1`]}>
-        <Route path="/edit/:id">
-          <BooksContext.Provider value={{ books: [], setBooks: jest.fn() }}>
-            <EditBook />
-          </BooksContext.Provider>
-        </Route>
-      </MemoryRouter>
-    );
+    const { getByTestId } = render(component);
 
     expect(getByTestId("book-page")).toBeInTheDocument();
   });
 
   test("updates book and navigates to home page on form submission", () => {
-    const oldBook = {
-      id: "1",
-      bookname: "Book1",
-      author: "Author1",
-      quantity: "1",
-      price: "1",
-    };
-    const book = {
-      id: "1",
-      bookname: "Book One",
-      author: "Author One",
-      price: "10",
-      quantity: "5",
-      date: expect.any(Date),
-    };
-    const setBooks = jest.fn();
-    const history = { push: jest.fn() };
-
-    const { getByTestId, getByLabelText, getByText } = render(
-      <MemoryRouter initialEntries={[`/edit/1`]}>
-        <Route path="/edit/:id">
-          <BooksContext.Provider value={{ books: [oldBook], setBooks }}>
-            <EditBook history={history} />
-          </BooksContext.Provider>
-        </Route>
-      </MemoryRouter>
-    );
+    const { getByTestId, getByLabelText, getByText } = render(component);
 
     fireEvent.change(getByLabelText(/book name/i), {
-      target: { value: book.bookname },
+      target: { value: mockBook.bookname },
     });
     fireEvent.change(getByLabelText(/author/i), {
-      target: { value: book.author },
+      target: { value: mockBook.author },
     });
     fireEvent.change(getByLabelText(/price/i), {
-      target: { value: book.price },
+      target: { value: mockBook.price },
     });
     fireEvent.change(getByLabelText(/quantity/i), {
-      target: { value: book.quantity },
+      target: { value: mockBook.quantity },
     });
 
     fireEvent.click(getByText("Submit"));

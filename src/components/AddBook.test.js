@@ -5,7 +5,7 @@ import AddBook from "./AddBook";
 
 describe("AddBook component", () => {
   it("should add a book to the context and redirect to the homepage on form submission", () => {
-    const book = {
+    const mockBook = {
       id: "1",
       bookname: "Book One",
       author: "Author One",
@@ -23,16 +23,16 @@ describe("AddBook component", () => {
     );
 
     fireEvent.change(getByLabelText(/book name/i), {
-      target: { value: book.bookname },
+      target: { value: mockBook.bookname },
     });
     fireEvent.change(getByLabelText(/author/i), {
-      target: { value: book.author },
+      target: { value: mockBook.author },
     });
     fireEvent.change(getByLabelText(/price/i), {
-      target: { value: book.price },
+      target: { value: mockBook.price },
     });
     fireEvent.change(getByLabelText(/quantity/i), {
-      target: { value: book.quantity },
+      target: { value: mockBook.quantity },
     });
 
     fireEvent.click(getByText("Submit"));

@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import Book from "./Book";
 
 describe("Book component", () => {
-  const book = {
+  const mockBook = {
     id: "1",
     bookname: "Test Book",
     author: "Test Author",
@@ -17,7 +17,7 @@ describe("Book component", () => {
   it("renders book details correctly", () => {
     const { getByText } = render(
       <BrowserRouter>
-        <Book {...book} handleRemoveBook={handleRemoveBook} />
+        <Book {...mockBook} handleRemoveBook={handleRemoveBook} />
       </BrowserRouter>
     );
 
@@ -31,7 +31,7 @@ describe("Book component", () => {
   it("calls handleRemoveBook when delete button is clicked", () => {
     const { getByTestId } = render(
       <BrowserRouter>
-        <Book {...book} handleRemoveBook={handleRemoveBook} />
+        <Book {...mockBook} handleRemoveBook={handleRemoveBook} />
       </BrowserRouter>
     );
 
@@ -43,7 +43,7 @@ describe("Book component", () => {
   it("redirects to edit page when edit button is clicked", () => {
     const { getByTestId } = render(
       <BrowserRouter>
-        <Book {...book} handleRemoveBook={handleRemoveBook} />
+        <Book {...mockBook} handleRemoveBook={handleRemoveBook} />
       </BrowserRouter>
     );
 
