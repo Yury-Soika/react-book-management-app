@@ -1,76 +1,83 @@
-import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
-import { v4 as uuidv4 } from 'uuid';
+import React, { useState, ChangeEvent, FormEvent } from "react";
+import { Form, Button } from "react-bootstrap";
+import { v4 as uuidv4 } from "uuid";
+import { IBook } from "./Book";
 
-const BookForm = (props) => {
-  const [book, setBook] = useState(() => {
-    return {
-      bookname: props.book ? props.book.bookname : '',
-      author: props.book ? props.book.author : '',
-      quantity: props.book ? props.book.quantity : '',
-      price: props.book ? props.book.price : '',
-      date: props.book ? props.book.date : ''
-    };
-  });
+interface BookFormProps {
+  book?: IBook;
+  handleOnSubmit: (book: IBook) => void;
+}
 
-  const [errorMsg, setErrorMsg] = useState('');
-  const { bookname, author, price, quantity } = book;
+const defaultBook = {
+  id: uuidv4(),
+  bookname: "",
+  author: "",
+  quantity: "",
+  price: "",
+  date: new Date(),
+};
 
-  const handleOnSubmit = (event) => {
+const BookForm: React.FC<BookFormProps> = (props) => {
+  const [book, setBook] = useState<IBook>(defaultBook);
+
+  const [errorMsg, setErrorMsg] = useState<string>("");
+  const { id, bookname, author, price, quantity } = book;
+
+  const handleOnSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const values = [bookname, author, price, quantity];
-    let errorMsg = '';
+    let errorMsg = "";
 
     const allFieldsFilled = values.every((field) => {
       const value = `${field}`.trim();
-      return value !== '' && value !== '0';
+      return value !== "" && value !== "0";
     });
 
     if (allFieldsFilled) {
-      const book = {
-        id: uuidv4(),
+      const newBook: IBook = {
+        id,
         bookname,
         author,
         price,
         quantity,
-        date: new Date()
+        date: new Date(),
       };
-      props.handleOnSubmit(book);
+      props.handleOnSubmit(newBook);
     } else {
-      errorMsg = 'Please fill out all the fields.';
+      errorMsg = "Please fill out all the fields.";
     }
     setErrorMsg(errorMsg);
   };
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     switch (name) {
-      case 'quantity':
-        if (value === '' || parseInt(value) === +value) {
+      case "quantity":
+        if (value === "" || parseInt(value) === +value) {
           setBook((prevState) => ({
             ...prevState,
-            [name]: value
+            [name]: value,
           }));
         }
         break;
-      case 'price':
-        if (value === '' || value.match(/^\d{1,}(\.\d{0,2})?$/)) {
+      case "price":
+        if (value === "" || value.match(/^\d{1,}(\.\d{0,2})?$/)) {
           setBook((prevState) => ({
             ...prevState,
-            [name]: value
+            [name]: value,
           }));
         }
         break;
       default:
         setBook((prevState) => ({
           ...prevState,
-          [name]: value
+          [name]: value,
         }));
     }
   };
 
   return (
-    <div className="main-form">
+    <div className="main-form" data-testid="book-page">
       {errorMsg && <p className="errorMsg">{errorMsg}</p>}
       <Form onSubmit={handleOnSubmit}>
         <Form.Group controlId="name">
@@ -117,7 +124,12 @@ const BookForm = (props) => {
             onChange={handleInputChange}
           />
         </Form.Group>
-        <Button variant="primary" type="submit" className="submit-btn">
+        <Button
+          data-testid={"submit-button"}
+          variant="primary"
+          type="submit"
+          className="submit-btn"
+        >
           Submit
         </Button>
       </Form>
