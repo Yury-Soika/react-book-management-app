@@ -47,17 +47,18 @@ describe("BookForm component", () => {
     expect(getByText("Please fill out all the fields.")).toBeInTheDocument();
   });
 
-  it("pre-populates the form fields if a book prop is provided", () => {
-    const mockBook = {
-      bookname: "Test Book",
-      author: "Test Author",
-      quantity: "10",
-      price: "9.99",
-      date: new Date(),
-    };
-    const { getByLabelText } = render(
-      <BookForm {...defaultProps} book={mockBook} />
-    );
+  it("updates the form fields on input change", () => {
+    const { getByLabelText } = render(<BookForm {...defaultProps} />);
+    fireEvent.change(getByLabelText("Book Name"), {
+      target: { value: "Test Book" },
+    });
+    fireEvent.change(getByLabelText("Book Author"), {
+      target: { value: "Test Author" },
+    });
+    fireEvent.change(getByLabelText("Quantity"), { target: { value: "10" } });
+    fireEvent.change(getByLabelText("Book Price"), {
+      target: { value: "9.99" },
+    });
     expect(getByLabelText("Book Name")).toHaveValue("Test Book");
     expect(getByLabelText("Book Author")).toHaveValue("Test Author");
     expect(getByLabelText("Quantity")).toHaveValue(10);

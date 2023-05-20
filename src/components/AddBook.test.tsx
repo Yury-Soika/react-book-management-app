@@ -1,5 +1,7 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
+import { createMemoryHistory } from "history";
+import { Router } from "react-router-dom";
 import BooksContext from "../context/BooksContext";
 import AddBook from "./AddBook";
 
@@ -9,16 +11,18 @@ describe("AddBook component", () => {
       id: "1",
       bookname: "Book One",
       author: "Author One",
-      price: 10,
-      quantity: 5,
+      price: "10",
+      quantity: "5",
       date: new Date(),
     };
     const setBooks = jest.fn();
-    const history = { push: jest.fn() };
+    const history = createMemoryHistory();
 
-    const { getByLabelText, getByText } = render(
+    const { getByLabelText, getByText, getByTestId } = render(
       <BooksContext.Provider value={{ books: [], setBooks }}>
-        <AddBook history={history} />
+        <Router history={history}>
+          <AddBook />
+        </Router>
       </BooksContext.Provider>
     );
 
@@ -39,7 +43,6 @@ describe("AddBook component", () => {
 
     expect(setBooks).toHaveBeenCalledTimes(1);
 
-    expect(history.push).toHaveBeenCalledTimes(1);
-    expect(history.push).toHaveBeenCalledWith("/");
+    expect(getByTestId("book-page")).toBeInTheDocument();
   });
 });

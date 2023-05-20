@@ -1,20 +1,20 @@
 import React, { useContext } from "react";
 import _ from "lodash";
-import Book from "./Book";
+import Book, { IBook } from "./Book";
 import BooksContext from "../context/BooksContext";
 
-const BooksList = () => {
+const BooksList: React.FC = () => {
   const { books, setBooks } = useContext(BooksContext);
 
-  const handleRemoveBook = (id) => {
-    setBooks(books.filter((book) => book.id !== id));
+  const handleRemoveBook = (id: string) => {
+    setBooks(books.filter((book: IBook) => book.id !== id));
   };
 
   return (
     <React.Fragment>
       <div data-testid="books-page" className="book-list">
         {!_.isEmpty(books) ? (
-          books.map((book) => (
+          books.map((book: IBook) => (
             <Book
               data-testid="book-page"
               key={book.id}

@@ -1,34 +1,36 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import { MemoryRouter, Route } from "react-router-dom";
+import { createMemoryHistory } from "history";
+import { MemoryRouter, Route, Router } from "react-router-dom";
 import BooksContext from "../context/BooksContext";
 import EditBook from "./EditBook";
 
 describe("EditBook component", () => {
-  const oldBook = {
+  const mockOldBook = {
     id: "1",
-    bookname: "Book1",
-    author: "Author1",
+    bookname: "Old book",
+    author: "Old author",
     quantity: "1",
     price: "1",
   };
-  const mockBook = {
+  const mockNewBook = {
     id: "1",
-    bookname: "Book One",
-    author: "Author One",
+    bookname: "New book",
+    author: "New author",
     price: "10",
     quantity: "5",
-    date: expect.any(Date),
   };
 
   const setBooks = jest.fn();
-  const history = { push: jest.fn() };
+  const history = createMemoryHistory();
 
   const component = (
     <MemoryRouter initialEntries={[`/edit/1`]}>
       <Route path="/edit/:id">
-        <BooksContext.Provider value={{ books: [oldBook], setBooks }}>
-          <EditBook history={history} />
+        <BooksContext.Provider value={{ books: [mockOldBook], setBooks }}>
+          <Router history={history}>
+            <EditBook />
+          </Router>
         </BooksContext.Provider>
       </Route>
     </MemoryRouter>
@@ -44,16 +46,16 @@ describe("EditBook component", () => {
     const { getByTestId, getByLabelText, getByText } = render(component);
 
     fireEvent.change(getByLabelText(/book name/i), {
-      target: { value: mockBook.bookname },
+      target: { value: mockNewBook.bookname },
     });
     fireEvent.change(getByLabelText(/author/i), {
-      target: { value: mockBook.author },
+      target: { value: mockNewBook.author },
     });
     fireEvent.change(getByLabelText(/price/i), {
-      target: { value: mockBook.price },
+      target: { value: mockNewBook.price },
     });
     fireEvent.change(getByLabelText(/quantity/i), {
-      target: { value: mockBook.quantity },
+      target: { value: mockNewBook.quantity },
     });
 
     fireEvent.click(getByText("Submit"));

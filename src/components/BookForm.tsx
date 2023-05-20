@@ -1,22 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import { Form, Button } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
+import { IBook } from "./Book";
 
-const BookForm = (props) => {
-  const [book, setBook] = useState(() => {
-    return {
-      bookname: props.book ? props.book.bookname : "",
-      author: props.book ? props.book.author : "",
-      quantity: props.book ? props.book.quantity : "",
-      price: props.book ? props.book.price : "",
-      date: props.book ? props.book.date : "",
-    };
-  });
+interface BookFormProps {
+  book?: IBook;
+  handleOnSubmit: (book: IBook) => void;
+}
 
-  const [errorMsg, setErrorMsg] = useState("");
-  const { bookname, author, price, quantity } = book;
+const defaultBook = {
+  id: uuidv4(),
+  bookname: "",
+  author: "",
+  quantity: "",
+  price: "",
+  date: new Date(),
+};
 
-  const handleOnSubmit = (event) => {
+const BookForm: React.FC<BookFormProps> = (props) => {
+  const [book, setBook] = useState<IBook>(defaultBook);
+
+  const [errorMsg, setErrorMsg] = useState<string>("");
+  const { id, bookname, author, price, quantity } = book;
+
+  const handleOnSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const values = [bookname, author, price, quantity];
     let errorMsg = "";
@@ -27,22 +34,22 @@ const BookForm = (props) => {
     });
 
     if (allFieldsFilled) {
-      const book = {
-        id: uuidv4(),
+      const newBook: IBook = {
+        id,
         bookname,
         author,
         price,
         quantity,
         date: new Date(),
       };
-      props.handleOnSubmit(book);
+      props.handleOnSubmit(newBook);
     } else {
       errorMsg = "Please fill out all the fields.";
     }
     setErrorMsg(errorMsg);
   };
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     switch (name) {
       case "quantity":

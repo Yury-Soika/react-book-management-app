@@ -5,7 +5,7 @@ import AppRouter from "./router/AppRouter";
 import BooksContext from "./context/BooksContext";
 import useLocalStorage from "./hooks/useLocalStorage";
 
-const App = () => {
+const App: React.FC = () => {
   const [books, setBooks] = useLocalStorage("books", []);
 
   return (

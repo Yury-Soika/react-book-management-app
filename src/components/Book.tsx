@@ -2,7 +2,20 @@ import React from "react";
 import { Button, Card } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 
-const Book = ({
+export interface IBook {
+  id: string;
+  bookname: string;
+  author: string;
+  quantity: string;
+  price: string;
+  date: Date;
+}
+
+interface BookProps extends IBook {
+  handleRemoveBook: (id: string) => void;
+}
+
+const Book: React.FC<BookProps> = ({
   id,
   bookname,
   author,

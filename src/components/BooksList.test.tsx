@@ -2,6 +2,7 @@ import React from "react";
 import { render, fireEvent, screen } from "@testing-library/react";
 import BooksList from "./BooksList";
 import BooksContext from "../context/BooksContext";
+import { IBook } from "./Book";
 
 describe("BooksList component", () => {
   const books = [
@@ -55,7 +56,7 @@ describe("BooksList component", () => {
   });
 
   it("displays a message when there are no books available", () => {
-    const emptyBooks = [];
+    const emptyBooks: IBook[] = [];
     render(
       <BooksContext.Provider value={{ books: emptyBooks, setBooks: jest.fn() }}>
         <BooksList />

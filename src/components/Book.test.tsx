@@ -8,9 +8,9 @@ describe("Book component", () => {
     id: "1",
     bookname: "Test Book",
     author: "Test Author",
-    price: 10,
-    quantity: 5,
-    date: "2022-01-01",
+    price: "10",
+    quantity: "5",
+    date: new Date("2022-01-01"),
   };
   const handleRemoveBook = jest.fn();
 
